@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import os
 
-def adicionar_texto_na_imagem(imagem_caminho, texto, numero, fonte_caminho, tamanho_fonte_texto, tamanho_fonte_numero, cor_texto, cor_sombra, salvar_como, quantidade_de_imagens):
+def adicionar_texto_na_imagem(imagem_caminho, texto, numero, fonte_caminho, tamanho_fonte_texto, tamanho_fonte_numero, cor_texto, cor_sombra, salvar_como):
     # abrir a imagem
     imagem = Image.open(imagem_caminho).convert('RGBA')
     largura_imagem, altura_imagem = imagem.size
@@ -52,25 +52,27 @@ def adicionar_texto_na_imagem(imagem_caminho, texto, numero, fonte_caminho, tama
     # adicionar número principal
     desenho_final.text(posicao_numero, numero, font=fonte_numero, fill=cor_texto)
     
-    # salvar a imagem com o texto adicionado
-    imagem.save(salvar_como)
+    # converte a imagem de RGBA pra RGB e salva em formato jpg
+    imagem = imagem.convert('RGB')
+    imagem.save(salvar_como, 'JPEG')
     print(f'Imagem salva como {salvar_como}')
 
 # pegar o diretório do script atual
 diretorio_atual = os.path.dirname(os.path.abspath(__file__))
 
 # configurações (Altere aqui)
-imagem_caminho = os.path.join(diretorio_atual, 'thumb.jpg')  # diretorio da imagem           | Default = thumb.png (altere o formato se necessario)
+imagem_caminho = os.path.join(diretorio_atual, 'thumb.png')  # diretorio da imagem           | Default = thumb.png (altere o formato se necessario)
 fonte_caminho = os.path.join(diretorio_atual, 'comic_sans.ttf')  # diretorio da fonte (.ttf) | Default = Comic Sans
 tamanho_fonte_texto = 148  # Tamanho da fonte do titulo | Default = 148
 tamanho_fonte_numero = 148  # tamanho do número         | Default = 148
 cor_texto = (255, 255, 255)  # cor do texto (RGB)       | Default = Branco
 cor_sombra = (0, 0, 0, 255)  # cor da sombra (RGBA)     | Default = Preto
-quantidade_de_imagens = 20
+ep_inicial = 1
+ep_final = 5
 
 
-for i in range(0, quantidade_de_imagens+1):
+for i in range(ep_inicial, ep_final+1):
     texto = 'Titulo'
     numero = f'#{i}'
-    salvar_como = os.path.join(diretorio_atual, f'Thumb{i}.png')
-    adicionar_texto_na_imagem(imagem_caminho, texto, numero, fonte_caminho, tamanho_fonte_texto, tamanho_fonte_numero, cor_texto, cor_sombra, salvar_como, quantidade_de_imagens)
+    salvar_como = os.path.join(diretorio_atual, f'Thumb{i}.jpg')
+    adicionar_texto_na_imagem(imagem_caminho, texto, numero, fonte_caminho, tamanho_fonte_texto, tamanho_fonte_numero, cor_texto, cor_sombra, salvar_como)
